@@ -9,7 +9,7 @@ import Foundation
 import nRFMeshProvision
 
 extension DoozMeshManagerApi: MeshNetworkDelegate{
-    
+
     func meshNetworkManager(_ manager: MeshNetworkManager, didReceiveMessage message: MeshMessage, sentFrom source: Address, to destination: Address) {
         print("📣 didReceiveMessage : \(message) from \(source) to \(destination)")
         // Handle the message based on its type.
@@ -21,7 +21,7 @@ extension DoozMeshManagerApi: MeshNetworkDelegate{
                     EventSinkKeys.message.elementAddress.rawValue: status.elementAddress,
                     EventSinkKeys.message.modelId.rawValue: status.modelId,
                     EventSinkKeys.message.appKeyIndex.rawValue: status.applicationKeyIndex,
-                    
+
                 ]
                 _sendFlutterMessage(message)
             } else {
@@ -150,7 +150,7 @@ extension DoozMeshManagerApi: MeshNetworkDelegate{
                 EventSinkKeys.message.destination.rawValue : destination,
                 EventSinkKeys.message.transmitCount.rawValue : status.count,
                 EventSinkKeys.message.transmitIntervalSteps.rawValue : status.steps,
-                
+
             ]
             _sendFlutterMessage(message)
         case let status as ConfigDefaultTtlStatus:
@@ -202,18 +202,28 @@ extension DoozMeshManagerApi: MeshNetworkDelegate{
                 EventSinkKeys.message.destination.rawValue : destination,
             ]
             _sendFlutterMessage(message)
+        // case let status as SendVendorModel :
+        //     let message: FlutterMessage = [
+        //         EventSinkKeys.eventName.rawValue : MessageEvent.onSendVendorModel.rawValue,
+        //         EventSinkKeys.message.packed.rawValue : status.mPacked,
+        //         EventSinkKeys.message.correlation.rawValue : status.mCorrelation,
+        //         EventSinkKeys.message.extra.rawValue : status.mExtra ?? 0,
+        //         EventSinkKeys.source.rawValue : source,
+        //         EventSinkKeys.message.destination.rawValue : destination,
+        //     ]
+        //     _sendFlutterMessage(message)
         default:
             break
         }
         delegate?.onNetworkUpdated(manager.meshNetwork!)
     }
-    
+
     func meshNetworkManager(_ manager: MeshNetworkManager, didSendMessage message: MeshMessage, from localElement: Element, to destination: Address) {
         print("📣 didSendMessage : \(message) from \(localElement) to \(destination)")
     }
-    
+
     func meshNetworkManager(_ manager: MeshNetworkManager, failedToSendMessage message: MeshMessage, from localElement: Element, to destination: Address, error: Error) {
         print("📣 failedToSendMessage : \(message) from \(localElement) to \(destination) : \(error)")
     }
-    
+
 }

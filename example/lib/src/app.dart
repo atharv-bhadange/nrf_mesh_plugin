@@ -28,7 +28,8 @@ class NordicNrfMeshExampleApp extends StatefulWidget {
   const NordicNrfMeshExampleApp({Key? key}) : super(key: key);
 
   @override
-  State<NordicNrfMeshExampleApp> createState() => _NordicNrfMeshExampleAppState();
+  State<NordicNrfMeshExampleApp> createState() =>
+      _NordicNrfMeshExampleAppState();
 }
 
 class _NordicNrfMeshExampleAppState extends State<NordicNrfMeshExampleApp> {
@@ -81,7 +82,8 @@ class _NordicNrfMeshExampleAppState extends State<NordicNrfMeshExampleApp> {
                 });
               } else {
                 _scaffoldKey.currentState!.clearSnackBars();
-                _scaffoldKey.currentState!.showSnackBar(const SnackBar(content: Text('Please load a mesh network')));
+                _scaffoldKey.currentState!.showSnackBar(const SnackBar(
+                    content: Text('Please load a mesh network')));
               }
             },
             items: const [
@@ -105,12 +107,13 @@ class _NordicNrfMeshExampleAppState extends State<NordicNrfMeshExampleApp> {
   }
 }
 
-void log(Object? msg) => debugPrint('[$NordicNrfMeshExampleApp - ${DateTime.now().toIso8601String()}] $msg');
+void log(Object? msg) => debugPrint(
+    '[$NordicNrfMeshExampleApp - ${DateTime.now().toIso8601String()}] $msg');
 
 Future<void> checkAndAskPermissions() async {
   if (defaultTargetPlatform == TargetPlatform.android) {
     final androidInfo = await DeviceInfoPlugin().androidInfo;
-    if (androidInfo.version.sdkInt! < 31) {
+    if (androidInfo.version.sdkInt < 31) {
       // location
       await Permission.locationWhenInUse.request();
       await Permission.locationAlways.request();

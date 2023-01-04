@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ffi';
 import 'dart:io';
 import 'dart:math';
 
@@ -526,6 +527,18 @@ class MeshManagerApi {
       'keyIndex': keyIndex,
     });
     return status;
+  }
+
+  Future<void> sendVendorModel(
+    int address,
+    Uint8List opCode,
+    String message,
+  ) async {
+    await _methodChannel.invokeMethod('sendVendorModel', {
+      'address': address,
+      'opCode': opCode,
+      'message': message,
+    });
   }
 
   /// Will send a ConfigCompositionDataGet message to the given [dest].
