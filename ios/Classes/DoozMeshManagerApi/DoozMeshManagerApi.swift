@@ -619,14 +619,14 @@ private extension DoozMeshManagerApi {
                 result(FlutterError(code: String(nsError.code), message: nsError.localizedDescription, details: nil))
             }
             break
-        case .sendVendorModel(let data):
+        case .golainVendorModelSet(let data):
             guard let appKey = meshNetworkManager.meshNetwork?.applicationKeys[KeyIndex(0)] else{
                 let error = MeshNetworkError.keyIndexOutOfRange
                 let nsError = error as NSError
                 result(FlutterError(code: String(nsError.code), message: nsError.localizedDescription, details: nil))
                 return
             }
-            let message = try SendVendorModel(opCode: UInt8(data.opCode), message: data.message)
+            let message = try GolainVendorModelSet(opCode: UInt32(data.opCode), message: data.message)
             do{
                 _ = try meshNetworkManager.send(
                     message,

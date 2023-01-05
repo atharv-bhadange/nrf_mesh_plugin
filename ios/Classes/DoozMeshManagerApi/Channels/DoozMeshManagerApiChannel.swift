@@ -48,7 +48,7 @@ enum DoozMeshManagerApiChannel {
     case sendV2MagicLevel(_ data: SendV2MagicLevelArguments)
     case getV2MagicLevel(_ data: GetV2MagicLevelArguments)
     case doozScenarioEpochSet(_ data: DoozEpochSetArguments)
-    case sendVendorModel(_ data: SendVendorModelArguments)
+    case golainVendorModelSet(_ data: GolainVendorModelArguments)
     case deprovision(_ data: DeprovisionArguments)
 
     case error(_ error: Error)
@@ -139,8 +139,8 @@ enum DoozMeshManagerApiChannel {
             //getDeviceUuid
             case "handleWriteCallbacks":
                 self = .handleWriteCallbacks(try HandleWriteCallbacksArguments(arguments))
-            case "sendVendorModel":
-                self = .sendVendorModel(try SendVendorModelArguments(arguments))
+            case "golainVendorModelSet":
+                self = .golainVendorModelSet(try GolainVendorModelSet(arguments))
             case "cachedProvisionedMeshNodeUuid":
                 self = .cachedProvisionedMeshNodeUuid
             case "deprovision":

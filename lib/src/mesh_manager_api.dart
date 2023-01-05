@@ -529,12 +529,12 @@ class MeshManagerApi {
     return status;
   }
 
-  Future<void> sendVendorModel(
+  Future<void> golainVendorModelSet(
     int address,
-    Uint8List opCode,
-    String message,
+    Uint32 opCode,
+    Uint8List message,
   ) async {
-    await _methodChannel.invokeMethod('sendVendorModel', {
+    await _methodChannel.invokeMethod('golainVendorModelSet', {
       'address': address,
       'opCode': opCode,
       'message': message,

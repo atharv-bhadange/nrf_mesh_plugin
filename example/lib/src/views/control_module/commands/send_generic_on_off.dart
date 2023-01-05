@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -50,16 +51,15 @@ class _SendGenericOnOffState extends State<SendGenericOnOff> {
                   debugPrint('send level $onOff to $selectedElementAddress');
                   final provisionerUuid = await widget.meshManagerApi.meshNetwork!.selectedProvisionerUuid();
                   final nodes = await widget.meshManagerApi.meshNetwork!.nodes;
-                  final opCode = [1];
-                  final list = Uint8List.fromList(opCode);
-                  log(list.toString());
+                  final opCode = 0x01;
                   try {
                     final provisionedNode = nodes.firstWhere((element) => element.uuid == provisionerUuid);
                     // final sequenceNumber = await widget.meshManagerApi.getSequenceNumber(provisionedNode);
                     // await widget.meshManagerApi
                     //     .sendGenericOnOffSet(selectedElementAddress!, onOff, sequenceNumber)
                     //     .timeout(const Duration(seconds: 40));
-                    await widget.meshManagerApi.sendVendorModel(selectedElementAddress!, list, "PU");
+                    await widget.meshManagerApi
+                        .golainVendorModelSet(selectedElementAddress!, opCode as Uint32, [12, 34, 54, 65] as Uint8List);
                     scaffoldMessenger.showSnackBar(const SnackBar(content: Text('OK')));
                   } on TimeoutException catch (_) {
                     scaffoldMessenger.showSnackBar(const SnackBar(content: Text('Board didn\'t respond')));
