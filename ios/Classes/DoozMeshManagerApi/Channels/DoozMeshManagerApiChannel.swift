@@ -140,7 +140,7 @@ enum DoozMeshManagerApiChannel {
             case "handleWriteCallbacks":
                 self = .handleWriteCallbacks(try HandleWriteCallbacksArguments(arguments))
             case "golainVendorModelSet":
-                self = .golainVendorModelSet(try GolainVendorModelSet(arguments))
+                self = .golainVendorModelSet(try GolainVendorModelArguments(arguments))
             case "cachedProvisionedMeshNodeUuid":
                 self = .cachedProvisionedMeshNodeUuid
             case "deprovision":

@@ -64,7 +64,7 @@ class GenericOnOffServerDelegate: ModelDelegate {
     private var lastTransaction: (source: Address, destination: MeshAddress, tid: UInt8, timestamp: Date)?
     /// The state observer.
     private var observer: ((GenericState<Bool>) -> ())?
-    
+
     init() {
         let types: [GenericMessage.Type] = [
             GenericOnOffGet.self,
@@ -73,9 +73,9 @@ class GenericOnOffServerDelegate: ModelDelegate {
         ]
         messageTypes = types.toMap()
     }
-    
+
     // MARK: - Message handlers
-    
+
     func model(_ model: Model, didReceiveAcknowledgedMessage request: AcknowledgedMeshMessage,
                from source: Address, sentTo destination: MeshAddress) -> MeshMessage {
         switch request {
@@ -89,7 +89,7 @@ class GenericOnOffServerDelegate: ModelDelegate {
                 break
             }
             lastTransaction = (source: source, destination: destination, tid: request.tid, timestamp: Date())
-            
+
             if let transitionTime = request.transitionTime,
                let delay = request.delay {
                 state = GenericState<Bool>(transitionFrom: state, to: request.isOn,
@@ -98,12 +98,12 @@ class GenericOnOffServerDelegate: ModelDelegate {
             } else {
                 state = GenericState<Bool>(request.isOn)
             }
-            
+
         default:
             // Not possible.
             break
         }
-        
+
         // Reply with GenericOnOffStatus.
         if let transition = state.transition, transition.remainingTime > 0 {
             return GenericOnOffStatus(state.value,
@@ -113,7 +113,7 @@ class GenericOnOffServerDelegate: ModelDelegate {
             return GenericOnOffStatus(state.value)
         }
     }
-    
+
     func model(_ model: Model, didReceiveUnacknowledgedMessage message: MeshMessage,
                from source: Address, sentTo destination: MeshAddress) {
         switch message {
@@ -127,7 +127,7 @@ class GenericOnOffServerDelegate: ModelDelegate {
                 break
             }
             lastTransaction = (source: source, destination: destination, tid: request.tid, timestamp: Date())
-            
+
             if let transitionTime = request.transitionTime,
                let delay = request.delay {
                 state = GenericState<Bool>(transitionFrom: state, to: request.isOn,
@@ -136,19 +136,19 @@ class GenericOnOffServerDelegate: ModelDelegate {
             } else {
                 state = GenericState<Bool>(request.isOn)
             }
-            
+
         default:
             // Not possible.
             break
         }
     }
-    
+
     func model(_ model: Model, didReceiveResponse response: MeshMessage,
                toAcknowledgedMessage request: AcknowledgedMeshMessage,
                from source: Address) {
         // Not possible.
     }
-    
+
     /// Sets a model state observer.
     ///
     /// - parameter observer: The observer that will be informed about
@@ -157,5 +157,5 @@ class GenericOnOffServerDelegate: ModelDelegate {
         self.observer = observer
         observer(state)
     }
-    
+
 }

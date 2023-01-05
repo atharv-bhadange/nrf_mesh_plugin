@@ -620,13 +620,17 @@ private extension DoozMeshManagerApi {
             }
             break
         case .golainVendorModelSet(let data):
+            print("golainVendorModelSet: Have data here")
             guard let appKey = meshNetworkManager.meshNetwork?.applicationKeys[KeyIndex(0)] else{
                 let error = MeshNetworkError.keyIndexOutOfRange
                 let nsError = error as NSError
                 result(FlutterError(code: String(nsError.code), message: nsError.localizedDescription, details: nil))
                 return
             }
-            let message = try GolainVendorModelSet(opCode: UInt32(data.opCode), message: data.message)
+            print("golainVendorModelSet: Have data here as well")
+            let opcode = UInt32(data.opCode)
+            let msg = data.message as Data
+            let message = try GolainVendorModelSet(opCode: opcode, message: msg)
             do{
                 _ = try meshNetworkManager.send(
                     message,
