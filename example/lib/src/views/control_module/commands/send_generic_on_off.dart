@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
-import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,8 +7,7 @@ import 'package:nordic_nrf_mesh/nordic_nrf_mesh.dart';
 class SendGenericOnOff extends StatefulWidget {
   final MeshManagerApi meshManagerApi;
 
-  const SendGenericOnOff({Key? key, required this.meshManagerApi})
-      : super(key: key);
+  const SendGenericOnOff({Key? key, required this.meshManagerApi}) : super(key: key);
 
   @override
   State<SendGenericOnOff> createState() => _SendGenericOnOffState();
@@ -50,38 +47,24 @@ class _SendGenericOnOffState extends State<SendGenericOnOff> {
               ? () async {
                   final scaffoldMessenger = ScaffoldMessenger.of(context);
                   debugPrint('send level $onOff to $selectedElementAddress');
-                  final provisionerUuid = await widget
-                      .meshManagerApi.meshNetwork!
-                      .selectedProvisionerUuid();
+                  final provisionerUuid = await widget.meshManagerApi.meshNetwork!.selectedProvisionerUuid();
                   final nodes = await widget.meshManagerApi.meshNetwork!.nodes;
-                  final opCode = 0x0001;
-                  final message = Uint8List.fromList([0x01, 0x00, 0x00, 0x00]);
                   try {
-                    final provisionedNode = nodes.firstWhere(
-                        (element) => element.uuid == provisionerUuid);
-                    // final sequenceNumber = await widget.meshManagerApi.getSequenceNumber(provisionedNode);
-                    // await widget.meshManagerApi
-                    //     .sendGenericOnOffSet(selectedElementAddress!, onOff, sequenceNumber)
-                    //     .timeout(const Duration(seconds: 40));
+                    final provisionedNode = nodes.firstWhere((element) => element.uuid == provisionerUuid);
+                    final sequenceNumber = await widget.meshManagerApi.getSequenceNumber(provisionedNode);
                     await widget.meshManagerApi
-                        .golainVendorModelSet(
-                            selectedElementAddress!, opCode, message)
-                        .timeout(Duration(seconds: 20));
-                    scaffoldMessenger
-                        .showSnackBar(const SnackBar(content: Text('OK')));
+                        .sendGenericOnOffSet(selectedElementAddress!, onOff, sequenceNumber)
+                        .timeout(const Duration(seconds: 40));
+                    scaffoldMessenger.showSnackBar(const SnackBar(content: Text('OK')));
                   } on TimeoutException catch (_) {
-                    scaffoldMessenger.showSnackBar(
-                        const SnackBar(content: Text('Board didn\'t respond')));
+                    scaffoldMessenger.showSnackBar(const SnackBar(content: Text('Board didn\'t respond')));
                   } on StateError catch (_) {
-                    scaffoldMessenger.showSnackBar(SnackBar(
-                        content: Text(
-                            'No provisioner found with this uuid : $provisionerUuid')));
+                    scaffoldMessenger.showSnackBar(
+                        SnackBar(content: Text('No provisioner found with this uuid : $provisionerUuid')));
                   } on PlatformException catch (e) {
-                    scaffoldMessenger
-                        .showSnackBar(SnackBar(content: Text('${e.message}')));
+                    scaffoldMessenger.showSnackBar(SnackBar(content: Text('${e.message}')));
                   } catch (e) {
-                    scaffoldMessenger
-                        .showSnackBar(SnackBar(content: Text(e.toString())));
+                    scaffoldMessenger.showSnackBar(SnackBar(content: Text(e.toString())));
                   }
                 }
               : null,

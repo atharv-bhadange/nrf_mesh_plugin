@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:nordic_nrf_mesh/nordic_nrf_mesh.dart';
 import 'package:nordic_nrf_mesh_example/src/views/control_module/commands/send_config_model_publication_add.dart';
+import 'package:nordic_nrf_mesh_example/src/views/control_module/commands/send_vendor_model.dart';
 
 import 'commands/send_deprovisioning.dart';
 import 'commands/send_generic_on_off.dart';
@@ -92,6 +93,7 @@ class _ModuleState extends State<Module> {
               ),
             ),
           const Divider(),
+          SendGolainVendorModel(meshManagerApi: widget.meshManagerApi),
           SendGenericLevel(meshManagerApi: widget.meshManagerApi),
           SendGenericOnOff(meshManagerApi: widget.meshManagerApi),
           SendConfigModelSubscriptionAdd(widget.meshManagerApi),
