@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -52,10 +53,14 @@ class _SendGolainVendorModelState extends State<SendGolainVendorModel> {
                   final scaffoldMessenger = ScaffoldMessenger.of(context);
                   debugPrint('Vendor Model to $selectedElementAddress');
                   try {
-                    await widget.meshManagerApi
+                    final vendorModelMessage = await widget.meshManagerApi
                         .golainVendorModelSend(selectedElementAddress!, opCode!, byteData!)
-                        .timeout(Duration(seconds: 10));
-                    scaffoldMessenger.showSnackBar(const SnackBar(content: Text('OK')));
+                        .timeout(const Duration(seconds: 10));
+                    // Creating a string message from the vendor model message for now
+                    String receivedMessage = String.fromCharCodes(vendorModelMessage.message);
+                    log("Decoded Message $receivedMessage");
+                    scaffoldMessenger
+                        .showSnackBar(SnackBar(content: Text('Vendor Model Received Data: $receivedMessage')));
                   } on TimeoutException catch (_) {
                     scaffoldMessenger.showSnackBar(const SnackBar(content: Text('Board didn\'t respond')));
                   } on PlatformException catch (e) {

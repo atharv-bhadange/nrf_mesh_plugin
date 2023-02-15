@@ -6,6 +6,7 @@ import android.util.Log
 import io.flutter.plugin.common.EventChannel
 import no.nordicsemi.android.mesh.MeshStatusCallbacks
 import no.nordicsemi.android.mesh.transport.*
+import no.nordicsemi.android.mesh.utils.MeshParserUtils
 
 class DoozMeshStatusCallbacks(var eventSink: EventChannel.EventSink?): MeshStatusCallbacks {
     private val tag: String = DoozMeshStatusCallbacks::class.java.simpleName
@@ -273,6 +274,16 @@ class DoozMeshStatusCallbacks(var eventSink: EventChannel.EventSink?): MeshStatu
                             "source" to meshMessage.src,
                             "destination" to meshMessage.dst,
                             "enable" to meshMessage.isEnable()
+                    ))
+                }
+            }
+            is VendorModelMessageStatus -> {
+                Log.d(tag, "received a Vendor Model Message")
+                Log.d("Vendor Message", String(meshMessage.parameters))
+                Handler(Looper.getMainLooper()).post {
+                    eventSink?.success(mapOf(
+                        "eventName" to "onVendorModelMessageStatus",
+                        "message" to meshMessage.parameters
                     ))
                 }
             }

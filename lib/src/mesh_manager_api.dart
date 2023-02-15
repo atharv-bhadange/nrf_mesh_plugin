@@ -49,6 +49,9 @@ class MeshManagerApi {
   late final _onLightCtlStatusController = StreamController<LightCtlStatusData>.broadcast();
   late final _onLightHslStatusController = StreamController<LightHslStatusData>.broadcast();
   late final _onConfigKeyRefreshPhaseStatusController = StreamController<ConfigKeyRefreshPhaseStatus>.broadcast();
+  // Vendor Model Status Event Controller
+  late final _onVendorModelMessageController = StreamController<VendorModelMessageData>.broadcast();
+
   // stream subs
   late StreamSubscription<MeshNetwork> _onNetworkLoadedSubscription;
   late StreamSubscription<MeshNetwork> _onNetworkImportedSubscription;
@@ -79,6 +82,8 @@ class MeshManagerApi {
   late StreamSubscription<LightCtlStatusData> _onLightCtlStatusSubscription;
   late StreamSubscription<LightHslStatusData> _onLightHslStatusSubscription;
   late StreamSubscription<ConfigKeyRefreshPhaseStatus> _onConfigKeyRefreshPhaseStatusSubscription;
+  // Vendor Model Status Event Subscription
+  late StreamSubscription<VendorModelMessageData> _onVendorModelMessageSubscription;
 
   MeshNetwork? _lastMeshNetwork;
 
@@ -200,6 +205,12 @@ class MeshManagerApi {
         .where((event) => event['eventName'] == MeshManagerApiEvent.configBeaconStatus.value)
         .map((event) => ConfigBeaconStatus.fromJson(event))
         .listen(_onConfigBeaconStatusController.add);
+
+    // Vendor Model
+    _onVendorModelMessageSubscription = _eventChannelStream
+        .where((event) => event['eventName'] == MeshManagerApiEvent.vendorModelMessageStatus.value)
+        .map((event) => VendorModelMessageData.fromJson(event))
+        .listen(_onVendorModelMessageController.add);
   }
   Stream<ConfigBeaconStatus> get onConfigBeaconStatus => _onConfigBeaconStatusController.stream;
 
@@ -262,6 +273,9 @@ class MeshManagerApi {
 
   Stream<ConfigKeyRefreshPhaseStatus> get onConfigKeyRefreshPhaseStatus =>
       _onConfigKeyRefreshPhaseStatusController.stream;
+
+  // Vendor Model Stream
+  Stream<VendorModelMessageData> get onVendorModelStatus => _onVendorModelMessageController.stream;
 
   /// Checks if the node is advertising with Node Identity
   Future<bool> isAdvertisedWithNodeIdentity(final List<int> serviceData) async {
@@ -356,7 +370,9 @@ class MeshManagerApi {
         _onConfigKeyRefreshPhaseStatusSubscription.cancel(),
         _onConfigKeyRefreshPhaseStatusController.close(),
         _onConfigBeaconStatusSubscription.cancel(),
-        _onConfigBeaconStatusController.close()
+        _onConfigBeaconStatusController.close(),
+        _onVendorModelMessageSubscription.cancel(),
+        _onVendorModelMessageController.close(),
       ]);
 
   /// Loads the mesh network from the local database.
@@ -528,17 +544,18 @@ class MeshManagerApi {
     return status;
   }
 
-  Future<void> golainVendorModelSend(
+  Future<VendorModelMessageData> golainVendorModelSend(
     int address,
     int opCode,
-    Uint8List byteData,
-    {
+    Uint8List byteData, {
     int keyIndex = 0,
     // This is hard coded from the Device Side
     int modelId = 0x05C31111,
     // This is hard coded from the Device Side
     int companyId = 0x05C3,
   }) async {
+    // Could do filtering on the stream to only get the message from the right address
+    final status = _onVendorModelMessageController.stream.first;
     await _methodChannel.invokeMethod('golainVendorModel', {
       'address': address,
       'keyIndex': keyIndex,
@@ -547,6 +564,7 @@ class MeshManagerApi {
       'opCode': opCode,
       'byteData': byteData,
     });
+    return status;
   }
 
   /// Will send a ConfigCompositionDataGet message to the given [dest].

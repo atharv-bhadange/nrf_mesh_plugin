@@ -52,4 +52,6 @@ class MeshManagerApiEvent {
   static const configDefaultTtlStatus = MeshManagerApiEvent._('onConfigDefaultTtlStatus');
   static const configKeyRefreshPhaseStatus = MeshManagerApiEvent._('onConfigKeyRefreshPhaseStatus');
   static const configBeaconStatus = MeshManagerApiEvent._('onConfigBeaconStatus');
+
+  static const vendorModelMessageStatus = MeshManagerApiEvent._('onVendorModelMessageStatus');
 }
