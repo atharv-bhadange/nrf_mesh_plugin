@@ -8,27 +8,15 @@
 import 'dart:core' as $core;
 import 'dart:convert' as $convert;
 import 'dart:typed_data' as $typed_data;
-@$core.Deprecated('Use statusDescriptor instead')
-const Status$json = const {
-  '1': 'Status',
-  '2': const [
-    const {'1': 'ON', '2': 0},
-    const {'1': 'OFF', '2': 1},
-  ],
-};
-
-/// Descriptor for `Status`. Decode as a `google.protobuf.EnumDescriptorProto`.
-final $typed_data.Uint8List statusDescriptor = $convert.base64Decode('CgZTdGF0dXMSBgoCT04QABIHCgNPRkYQAQ==');
-@$core.Deprecated('Use rGBDescriptor instead')
-const RGB$json = const {
-  '1': 'RGB',
+@$core.Deprecated('Use shadowDescriptor instead')
+const shadow$json = const {
+  '1': 'shadow',
   '2': const [
     const {'1': 'red', '3': 1, '4': 1, '5': 5, '10': 'red'},
     const {'1': 'green', '3': 2, '4': 1, '5': 5, '10': 'green'},
     const {'1': 'blue', '3': 3, '4': 1, '5': 5, '10': 'blue'},
-    const {'1': 'status', '3': 4, '4': 1, '5': 14, '6': '.Status', '10': 'status'},
   ],
 };
 
-/// Descriptor for `RGB`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List rGBDescriptor = $convert.base64Decode('CgNSR0ISEAoDcmVkGAEgASgFUgNyZWQSFAoFZ3JlZW4YAiABKAVSBWdyZWVuEhIKBGJsdWUYAyABKAVSBGJsdWUSHwoGc3RhdHVzGAQgASgOMgcuU3RhdHVzUgZzdGF0dXM=');
+/// Descriptor for `shadow`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List shadowDescriptor = $convert.base64Decode('CgZzaGFkb3cSEAoDcmVkGAEgASgFUgNyZWQSFAoFZ3JlZW4YAiABKAVSBWdyZWVuEhIKBGJsdWUYAyABKAVSBGJsdWU=');

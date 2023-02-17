@@ -9,25 +9,19 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'rgb_on_off.pbenum.dart';
-
-export 'rgb_on_off.pbenum.dart';
-
-class RGB extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'RGB', createEmptyInstance: create)
+class shadow extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'shadow', createEmptyInstance: create)
     ..a<$core.int>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'red', $pb.PbFieldType.O3)
     ..a<$core.int>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'green', $pb.PbFieldType.O3)
     ..a<$core.int>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'blue', $pb.PbFieldType.O3)
-    ..e<Status>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: Status.ON, valueOf: Status.valueOf, enumValues: Status.values)
     ..hasRequiredFields = false
   ;
 
-  RGB._() : super();
-  factory RGB({
+  shadow._() : super();
+  factory shadow({
     $core.int? red,
     $core.int? green,
     $core.int? blue,
-    Status? status,
   }) {
     final _result = create();
     if (red != null) {
@@ -39,31 +33,28 @@ class RGB extends $pb.GeneratedMessage {
     if (blue != null) {
       _result.blue = blue;
     }
-    if (status != null) {
-      _result.status = status;
-    }
     return _result;
   }
-  factory RGB.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory RGB.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  factory shadow.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory shadow.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  RGB clone() => RGB()..mergeFromMessage(this);
+  shadow clone() => shadow()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  RGB copyWith(void Function(RGB) updates) => super.copyWith((message) => updates(message as RGB)) as RGB; // ignore: deprecated_member_use
+  shadow copyWith(void Function(shadow) updates) => super.copyWith((message) => updates(message as shadow)) as shadow; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
-  static RGB create() => RGB._();
-  RGB createEmptyInstance() => create();
-  static $pb.PbList<RGB> createRepeated() => $pb.PbList<RGB>();
+  static shadow create() => shadow._();
+  shadow createEmptyInstance() => create();
+  static $pb.PbList<shadow> createRepeated() => $pb.PbList<shadow>();
   @$core.pragma('dart2js:noInline')
-  static RGB getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<RGB>(create);
-  static RGB? _defaultInstance;
+  static shadow getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<shadow>(create);
+  static shadow? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.int get red => $_getIZ(0);
@@ -91,14 +82,5 @@ class RGB extends $pb.GeneratedMessage {
   $core.bool hasBlue() => $_has(2);
   @$pb.TagNumber(3)
   void clearBlue() => clearField(3);
-
-  @$pb.TagNumber(4)
-  Status get status => $_getN(3);
-  @$pb.TagNumber(4)
-  set status(Status v) { setField(4, v); }
-  @$pb.TagNumber(4)
-  $core.bool hasStatus() => $_has(3);
-  @$pb.TagNumber(4)
-  void clearStatus() => clearField(4);
 }
 

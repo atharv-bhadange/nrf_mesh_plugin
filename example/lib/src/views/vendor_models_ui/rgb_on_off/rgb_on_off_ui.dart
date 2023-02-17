@@ -17,9 +17,10 @@ class RGBProtobuf extends StatefulWidget {
   final MeshManagerApi meshManagerApi;
   final int selectedElementAddress;
   final int opCode;
+  final int modelId;
 
   const RGBProtobuf(
-      {Key? key, required this.meshManagerApi, required this.selectedElementAddress, required this.opCode})
+      {Key? key, required this.meshManagerApi, required this.selectedElementAddress, required this.opCode, required this.modelId})
       : super(key: key);
   @override
   State<RGBProtobuf> createState() => _RGBProtobufState();
@@ -48,61 +49,62 @@ class _RGBProtobufState extends State<RGBProtobuf> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ElevatedButton(
-                  onPressed: () async {
-                    var status = Status.ON;
-                    final message = RGB()..status = status;
-                    final buffer = message.writeToBuffer();
+                // ElevatedButton(
+                //   onPressed: () async {
+                //     var status = Status.ON;
+                //     final message = shadow()..status = status;
+                //     final buffer = message.writeToBuffer();
 
-                    final scaffoldMessenger = ScaffoldMessenger.of(context);
-                  try {
-                    final vendorModelMessage = await widget.meshManagerApi
-                        .golainVendorModelSend(widget.selectedElementAddress, widget.opCode, buffer)
-                        .timeout(const Duration(seconds: 10));
-                    // Creating a string message from the vendor model message for now
-                    String receivedMessage = String.fromCharCodes(vendorModelMessage.message);
-                    log("Decoded Message $receivedMessage");
-                    scaffoldMessenger
-                        .showSnackBar(SnackBar(content: Text('Vendor Model Received Data: $receivedMessage')));
-                  } on TimeoutException catch (_) {
-                    scaffoldMessenger.showSnackBar(const SnackBar(content: Text('Board didn\'t respond')));
-                  } on PlatformException catch (e) {
-                    scaffoldMessenger.showSnackBar(SnackBar(content: Text('${e.message}')));
-                  } catch (e) {
-                    scaffoldMessenger.showSnackBar(SnackBar(content: Text(e.toString())));
-                  }
-                  },
-                  child: const Text('ON'),
-                ),
+                //     final scaffoldMessenger = ScaffoldMessenger.of(context);
+                //   try {
+                //     final vendorModelMessage = await widget.meshManagerApi
+                //         .golainVendorModelSend(widget.selectedElementAddress, widget.opCode, buffer)
+                //         .timeout(const Duration(seconds: 10));
+                //     // Creating a string message from the vendor model message for now
+                //     String receivedMessage = String.fromCharCodes(vendorModelMessage.message);
+                //     log("Decoded Message $receivedMessage");
+                //     scaffoldMessenger
+                //         .showSnackBar(SnackBar(content: Text('Vendor Model Received Data: $receivedMessage')));
+                //   } on TimeoutException catch (_) {
+                //     scaffoldMessenger.showSnackBar(const SnackBar(content: Text('Board didn\'t respond')));
+                //   } on PlatformException catch (e) {
+                //     scaffoldMessenger.showSnackBar(SnackBar(content: Text('${e.message}')));
+                //   } catch (e) {
+                //     scaffoldMessenger.showSnackBar(SnackBar(content: Text(e.toString())));
+                //   }
+                //   },
+                //   child: const Text('ON'),
+                // ),
                 const SizedBox(
                   width: 20,
                 ),
-                ElevatedButton(
-                  onPressed: () async {
-                    var status = Status.OFF;
-                    final message = RGB()..status = status;
-                    final buffer = message.writeToBuffer();
+                // ElevatedButton(
+                //   onPressed: () async {
+                //     var status = Status.OFF;
+                //     final message = shadow()..status = status;
+                //     final buffer = message.writeToBuffer();
 
-                    final scaffoldMessenger = ScaffoldMessenger.of(context);
-                  try {
-                    final vendorModelMessage = await widget.meshManagerApi
-                        .golainVendorModelSend(widget.selectedElementAddress, widget.opCode, buffer)
-                        .timeout(const Duration(seconds: 10));
-                    // Creating a string message from the vendor model message for now
-                    String receivedMessage = String.fromCharCodes(vendorModelMessage.message);
-                    log("Decoded Message $receivedMessage");
-                    scaffoldMessenger
-                        .showSnackBar(SnackBar(content: Text('Vendor Model Received Data: $receivedMessage')));
-                  } on TimeoutException catch (_) {
-                    scaffoldMessenger.showSnackBar(const SnackBar(content: Text('Board didn\'t respond')));
-                  } on PlatformException catch (e) {
-                    scaffoldMessenger.showSnackBar(SnackBar(content: Text('${e.message}')));
-                  } catch (e) {
-                    scaffoldMessenger.showSnackBar(SnackBar(content: Text(e.toString())));
-                  }
-                  },
-                  child: const Text('OFF'),
-                ),
+                //     final scaffoldMessenger = ScaffoldMessenger.of(context);
+                //   try {
+                //     //! SENDING THE MODEL ID HERE EXPLICITLY
+                //     final vendorModelMessage = await widget.meshManagerApi
+                //         .golainVendorModelSend(widget.selectedElementAddress, widget.opCode, buffer, modelId: widget.modelId)
+                //         .timeout(const Duration(seconds: 10));
+                //     // Creating a string message from the vendor model message for now
+                //     String receivedMessage = String.fromCharCodes(vendorModelMessage.message);
+                //     log("Decoded Message $receivedMessage");
+                //     scaffoldMessenger
+                //         .showSnackBar(SnackBar(content: Text('Vendor Model Received Data: $receivedMessage')));
+                //   } on TimeoutException catch (_) {
+                //     scaffoldMessenger.showSnackBar(const SnackBar(content: Text('Board didn\'t respond')));
+                //   } on PlatformException catch (e) {
+                //     scaffoldMessenger.showSnackBar(SnackBar(content: Text('${e.message}')));
+                //   } catch (e) {
+                //     scaffoldMessenger.showSnackBar(SnackBar(content: Text(e.toString())));
+                //   }
+                //   },
+                //   child: const Text('OFF'),
+                // ),
               ],
             ),
             const Divider(
@@ -140,7 +142,7 @@ class _RGBProtobufState extends State<RGBProtobuf> {
             ),
             ElevatedButton(
                 onPressed: () async {
-                  final message = RGB()
+                  final message = shadow()
                     ..red = currentColor.red
                     ..green = currentColor.green
                     ..blue = currentColor.blue;

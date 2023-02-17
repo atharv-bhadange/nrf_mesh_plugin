@@ -1,14 +1,8 @@
 syntax = "proto3";
 
-enum Status {
-   ON = 0;
-   OFF = 1;
-}
-
-message RGB {
+message shadow {
    int32 red = 1;
    int32 green = 2;
    int32 blue = 3;
-   Status status = 4;
 }
 
