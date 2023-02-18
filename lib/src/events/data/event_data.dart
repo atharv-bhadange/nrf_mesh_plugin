@@ -20,3 +20,4 @@ export 'magic_level_set_status/magic_level_set_status.dart';
 export 'mesh_network/mesh_network_event.dart';
 export 'mesh_provisioning_status/mesh_provisioning_status.dart';
 export 'send_provisioning_pdu/send_provisioning_pdu.dart';
+export 'vendor_model_message_status/vendor_model_message_status.dart';

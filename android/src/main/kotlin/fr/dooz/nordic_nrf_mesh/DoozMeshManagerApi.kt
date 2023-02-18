@@ -386,6 +386,40 @@ class DoozMeshManagerApi(context: Context, binaryMessenger: BinaryMessenger) : S
                 mMeshManagerApi.createMeshPdu(address, meshMessage)
                 result.success(null)
             }
+            "golainVendorModel" -> {
+                 // This is the address of element that we need
+                 val address = call.argument<Int>("address")!!
+
+                 // KeyIndex -> 0 from the flutter side, it is the index of the app key
+                 val keyIndex = call.argument<Int>("keyIndex")!!
+
+                // Model Identifier -> 0x05C31111 from the flutter side len -> 32-bit
+                // val modelIdentifier = 0x05C31111;
+                val modelIdentifier = call.argument<Int>("modelId")!!
+
+                // Company Identifier -> 0x05C3 this is defined on the device side len -> 16-bit
+                // val companyIdentifier = 0x05C3
+                val companyId = call.argument<Int>("companyId")!!
+
+                // opCode -> 0x0000 // Currently for testing purpose
+                val opCode = call.argument<Int>("opCode")!!
+
+                // byteBuffer -> the raw byte array we are sending
+                val byteData = call.argument<ByteArray>("byteData")!!
+                Log.i("RECEIVED TO KOTLIN", "Address: $address, keyIndex: $keyIndex, ModelId: $modelIdentifier, CompanyId: $companyId, Opcode: $opCode, Data: $byteData")
+
+                val meshMessage = VendorModelMessageAcked(
+                    mMeshManagerApi.meshNetwork!!.getAppKey(keyIndex),
+                    modelIdentifier,
+                    companyId,
+                    opCode,
+                    byteData
+                )
+
+                 mMeshManagerApi.createMeshPdu(address, meshMessage);
+                 result.success("Send Message PDU")
+
+            }
             "sendLightLightness" -> {
                 val sequenceNumber = call.argument<Int>("sequenceNumber")!!
                 val address = call.argument<Int>("address")!!
