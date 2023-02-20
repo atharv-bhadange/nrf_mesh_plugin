@@ -1,19 +1,27 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 
+/// `VendorModelMessageStatus` is a data class that contains the status of a message sent to a vendor model.
+/// It is used in the `VendorModelMessageStatusEvent` event.
+/// The `VendorModelMessageStatus` is received from the `VendorModelMessageStatusEvent` event.
 class VendorModelMessageData {
+  /// EventName is required to identify the event channel callback.
   String eventName;
+  /// Message is the protobuf message that is received to the device.
+  /// The message is a `Uint8List`
   Uint8List message;
 
+  /// Constructor requires the `eventName` and the `message`.
   VendorModelMessageData(this.eventName, this.message);
 
+  // This is required to convert the data to a map, from the event channel.
   VendorModelMessageData.fromJson(Map<String, dynamic> json)
       : eventName = json['eventName'],
         message = Platform.isIOS ? Uint8List.fromList(json['message'].cast<int>().toList()) : json['message'];
 
   Map<String, dynamic> toJson() => {
         'eventName': eventName,
-        'data': message,
+        'message': message,
       };
 
   VendorModelMessageData copyWith({

@@ -60,6 +60,7 @@ class _NordicNrfMeshExampleAppState extends State<NordicNrfMeshExampleApp> {
     }
 
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         brightness: Brightness.light,
         primarySwatch: const MaterialColor(0xFF00A499, primarySwatch),
