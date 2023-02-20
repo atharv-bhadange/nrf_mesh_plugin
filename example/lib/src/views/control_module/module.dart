@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
@@ -119,6 +120,19 @@ class _ModuleState extends State<Module> {
       final elements = await node.elements;
       for (final element in elements) {
         for (final model in element.models) {
+          // iOS specific way to bind app key with the correct model id
+          int passedModelId = model.modelId;
+          if (Platform.isIOS) {
+            // hardcoded model ids according to the hardware
+            if (model.modelId == 0x1111 || model.modelId == 0x2222) {
+              String modelId = model.modelId.toRadixString(16);
+              // hardcoded company id
+              String cId = "0x05C3";
+              // concatenate company id and model id as this is how it is stored on the iOS native side
+              modelId = cId + modelId;
+              passedModelId = int.parse(modelId);
+            }
+          }
           if (model.boundAppKey.isEmpty) {
             if (element == elements.first && model == element.models.first) {
               continue;
@@ -128,7 +142,7 @@ class _ModuleState extends State<Module> {
             await widget.meshManagerApi.sendConfigModelAppBind(
               unicast,
               element.address,
-              model.modelId,
+              passedModelId,
             );
           }
         }

@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/foundation.dart';
 
 /// `VendorModelMessageStatus` is a data class that contains the status of a message sent to a vendor model.
@@ -16,7 +17,7 @@ class VendorModelMessageData {
   // This is required to convert the data to a map, from the event channel.
   VendorModelMessageData.fromJson(Map<String, dynamic> json)
       : eventName = json['eventName'],
-        message = json['message'];
+        message = Platform.isIOS ? Uint8List.fromList(json['message'].cast<int>().toList()) : json['message'];
 
   Map<String, dynamic> toJson() => {
         'eventName': eventName,

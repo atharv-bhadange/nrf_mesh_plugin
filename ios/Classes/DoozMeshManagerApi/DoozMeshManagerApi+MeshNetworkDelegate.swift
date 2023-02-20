@@ -191,6 +191,15 @@ extension DoozMeshManagerApi: MeshNetworkDelegate{
                 EventSinkKeys.message.destination.rawValue : destination,
             ]
             _sendFlutterMessage(message)
+
+       case let status as UnknownMessage where (status.opCode & 0xCFFFFF) != (0xC00000 | UInt32(companyId.bigEndian)):
+
+        let message: FlutterMessage = [
+               EventSinkKeys.eventName.rawValue : MessageEvent.onVendorModelMessageStatus.rawValue,
+               EventSinkKeys.message.message.rawValue : status.parameters!.bytes,
+        ]
+           _sendFlutterMessage(message)
+
         case let status as DoozEpochStatus:
             let message: FlutterMessage = [
                 EventSinkKeys.eventName.rawValue : MessageEvent.onDoozEpochStatus.rawValue,
@@ -202,16 +211,6 @@ extension DoozMeshManagerApi: MeshNetworkDelegate{
                 EventSinkKeys.message.destination.rawValue : destination,
             ]
             _sendFlutterMessage(message)
-        // case let status as SendVendorModel :
-        //     let message: FlutterMessage = [
-        //         EventSinkKeys.eventName.rawValue : MessageEvent.onSendVendorModel.rawValue,
-        //         EventSinkKeys.message.packed.rawValue : status.mPacked,
-        //         EventSinkKeys.message.correlation.rawValue : status.mCorrelation,
-        //         EventSinkKeys.message.extra.rawValue : status.mExtra ?? 0,
-        //         EventSinkKeys.source.rawValue : source,
-        //         EventSinkKeys.message.destination.rawValue : destination,
-        //     ]
-        //     _sendFlutterMessage(message)
         default:
             break
         }
