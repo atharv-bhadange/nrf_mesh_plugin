@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -52,9 +53,11 @@ class _SendGolainVendorModelState extends State<SendGolainVendorModel> {
               ? () async {
                   final scaffoldMessenger = ScaffoldMessenger.of(context);
                   debugPrint('Vendor Model to $selectedElementAddress');
+                  // Concatination of the opCode and modelId is done on the native side in iOS
+                  int modelId = Platform.isAndroid ? 0x05C31111 : 0x1111;
                   try {
                     final vendorModelMessage = await widget.meshManagerApi
-                        .golainVendorModelSend(selectedElementAddress!, opCode!, byteData!)
+                        .golainVendorModelSend(selectedElementAddress!, opCode!, byteData!, modelId: modelId)
                         .timeout(const Duration(seconds: 10));
                     // Creating a string message from the vendor model message for now
                     String receivedMessage = String.fromCharCodes(vendorModelMessage.message);

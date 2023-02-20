@@ -117,6 +117,7 @@ enum MessageEvent: String{
     case onConfigBeaconStatus
     case onMagicLevelSetStatus
     case onMagicLevelGetStatus
+    case onVendorModelMessageStatus
     case onDoozEpochStatus
 }
 
@@ -175,6 +176,8 @@ enum EventSinkKeys: String{
         case packed
         case epoch
         case extra
+        case opCode
+        case message
     }
     
     enum network: String{

@@ -47,8 +47,8 @@ enum DoozMeshManagerApiChannel {
     case networkIdMatches(_ data: NetworkIdMatchesArguments)
     case sendV2MagicLevel(_ data: SendV2MagicLevelArguments)
     case getV2MagicLevel(_ data: GetV2MagicLevelArguments)
+    case golainVendorModelGet(_ data: GolainVendorModelGetArguments)
     case doozScenarioEpochSet(_ data: DoozEpochSetArguments)
-    case golainVendorModelSet(_ data: GolainVendorModelArguments)
     case deprovision(_ data: DeprovisionArguments)
 
     case error(_ error: Error)
@@ -134,13 +134,13 @@ enum DoozMeshManagerApiChannel {
                 self = .sendV2MagicLevel(try SendV2MagicLevelArguments(arguments))
             case "getV2MagicLevel":
                 self = .getV2MagicLevel(try GetV2MagicLevelArguments(arguments))
+            case "golainVendorModel":
+                self = .golainVendorModelGet(try GolainVendorModelGetArguments(arguments))
             case "doozScenarioEpochSet":
                 self = .doozScenarioEpochSet(try DoozEpochSetArguments(arguments))
             //getDeviceUuid
             case "handleWriteCallbacks":
                 self = .handleWriteCallbacks(try HandleWriteCallbacksArguments(arguments))
-            case "golainVendorModelSet":
-                self = .golainVendorModelSet(try GolainVendorModelArguments(arguments))
             case "cachedProvisionedMeshNodeUuid":
                 self = .cachedProvisionedMeshNodeUuid
             case "deprovision":

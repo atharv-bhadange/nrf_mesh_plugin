@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/foundation.dart';
 
 class VendorModelMessageData {
@@ -8,7 +9,7 @@ class VendorModelMessageData {
 
   VendorModelMessageData.fromJson(Map<String, dynamic> json)
       : eventName = json['eventName'],
-        message = json['message'];
+        message = Platform.isIOS ? Uint8List.fromList(json['message'].cast<int>().toList()) : json['message'];
 
   Map<String, dynamic> toJson() => {
         'eventName': eventName,
