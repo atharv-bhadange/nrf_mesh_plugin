@@ -124,13 +124,10 @@ class _ModuleState extends State<Module> {
           int passedModelId = model.modelId;
           if (Platform.isIOS) {
             // hardcoded model ids according to the hardware
-            if (model.modelId == 0x1111 || model.modelId == 0x2222) {
-              String modelId = model.modelId.toRadixString(16);
-              // hardcoded company id
-              String cId = "0x05C3";
-              // concatenate company id and model id as this is how it is stored on the iOS native side
-              modelId = cId + modelId;
-              passedModelId = int.parse(modelId);
+            if (model.modelId == 0x1111) {
+              passedModelId = dataPlaneModelId;
+            } else if (model.modelId == 0x2222) {
+              passedModelId = controlPlaneModelId;
             }
           }
           if (model.boundAppKey.isEmpty) {

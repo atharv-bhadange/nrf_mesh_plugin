@@ -192,13 +192,16 @@ extension DoozMeshManagerApi: MeshNetworkDelegate{
             ]
             _sendFlutterMessage(message)
 
-       case let status as UnknownMessage where (status.opCode & 0xCFFFFF) != (0xC00000 | UInt32(companyId.bigEndian)):
-
-        let message: FlutterMessage = [
-               EventSinkKeys.eventName.rawValue : MessageEvent.onVendorModelMessageStatus.rawValue,
-               EventSinkKeys.message.message.rawValue : status.parameters!.bytes,
-        ]
-           _sendFlutterMessage(message)
+        /// Handling of vendor model messages
+        case let status as UnknownMessage where (status.opCode & 0xC0FFFF) == (0xC00000 | UInt32(companyId.bigEndian)):
+            
+            let message: FlutterMessage = [
+                EventSinkKeys.eventName.rawValue : MessageEvent.onVendorModelMessageStatus.rawValue,
+                EventSinkKeys.message.message.rawValue : status.parameters!.bytes,
+                EventSinkKeys.message.source.rawValue : source,
+            ]
+            _sendFlutterMessage(message)
+            
 
         case let status as DoozEpochStatus:
             let message: FlutterMessage = [

@@ -208,7 +208,9 @@ class MeshManagerApi {
 
     // Vendor Model
     _onVendorModelMessageSubscription = _eventChannelStream
-        .where((event) => event['eventName'] == MeshManagerApiEvent.vendorModelMessageStatus.value)
+        .where((event) =>
+            event['eventName'] == MeshManagerApiEvent.vendorModelMessageStatus.value &&
+            event['source'] != 1) // filtering out the messages sent by the app
         .map((event) => VendorModelMessageData.fromJson(event))
         .listen(_onVendorModelMessageController.add);
   }

@@ -609,6 +609,8 @@ private extension DoozMeshManagerApi {
                 return
             }
             companyId = data.companyIdentifier
+            print(companyId)
+            print(data.message.bytes)
             let message = GolainVendorModelGet(opCode: data.opCode, companyIdentifier: data.companyIdentifier, parameters: data.message)
             do{
                 _ = try meshNetworkManager.send(
