@@ -207,12 +207,17 @@ class MeshManagerApi {
         .listen(_onConfigBeaconStatusController.add);
 
     // Vendor Model
-    _onVendorModelMessageSubscription = _eventChannelStream
-        .where((event) =>
-            event['eventName'] == MeshManagerApiEvent.vendorModelMessageStatus.value &&
-            event['source'] != 1) // filtering out the messages sent by the app
-        .map((event) => VendorModelMessageData.fromJson(event))
-        .listen(_onVendorModelMessageController.add);
+    _onVendorModelMessageSubscription = Platform.isIOS
+        ? _eventChannelStream
+            .where((event) =>
+                event['eventName'] == MeshManagerApiEvent.vendorModelMessageStatus.value &&
+                event['source'] != 1) // filtering out the messages sent by the app
+            .map((event) => VendorModelMessageData.fromJson(event))
+            .listen(_onVendorModelMessageController.add)
+        : _eventChannelStream
+            .where((event) => event['eventName'] == MeshManagerApiEvent.vendorModelMessageStatus.value)
+            .map((event) => VendorModelMessageData.fromJson(event))
+            .listen(_onVendorModelMessageController.add);
   }
   Stream<ConfigBeaconStatus> get onConfigBeaconStatus => _onConfigBeaconStatusController.stream;
 

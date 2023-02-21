@@ -15,7 +15,7 @@ class VendorModelMessageData {
 
   /// Source is the source of the message.
   /// Getting from the native side to filter the source message
-  int source;
+  int? source;
 
   /// Constructor requires the `eventName` and the `message`.
   VendorModelMessageData(this.eventName, this.message, this.source);
