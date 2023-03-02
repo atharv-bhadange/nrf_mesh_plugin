@@ -39,7 +39,6 @@ class GenericOnOffClientDelegate: ModelDelegate {
     init() {
         let types: [GenericMessage.Type] = [
             GenericOnOffStatus.self,
-            // GolainVendorModelStatus.self
         ]
         messageTypes = types.toMap()
     }

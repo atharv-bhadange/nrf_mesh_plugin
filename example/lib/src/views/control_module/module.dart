@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
@@ -119,6 +120,16 @@ class _ModuleState extends State<Module> {
       final elements = await node.elements;
       for (final element in elements) {
         for (final model in element.models) {
+          // iOS specific way to bind app key with the correct model id
+          int passedModelId = model.modelId;
+          if (Platform.isIOS) {
+            // hardcoded model ids according to the hardware
+            if (model.modelId == 0x1111) {
+              passedModelId = dataPlaneModelId;
+            } else if (model.modelId == 0x2222) {
+              passedModelId = controlPlaneModelId;
+            }
+          }
           if (model.boundAppKey.isEmpty) {
             if (element == elements.first && model == element.models.first) {
               continue;
@@ -128,7 +139,7 @@ class _ModuleState extends State<Module> {
             await widget.meshManagerApi.sendConfigModelAppBind(
               unicast,
               element.address,
-              model.modelId,
+              passedModelId,
             );
           }
         }

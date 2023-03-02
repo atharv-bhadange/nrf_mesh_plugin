@@ -15,6 +15,7 @@ class DoozMeshManagerApi: NSObject{
     var delegate: DoozMeshManagerApiDelegate?
     var eventSink: FlutterEventSink?
     var mtuSize: Int = -1
+    var companyId: UInt16 = 0
 
     //MARK: Private properties
     private var doozMeshNetwork: DoozMeshNetwork?
@@ -599,14 +600,18 @@ private extension DoozMeshManagerApi {
                 result(FlutterError(code: String(nsError.code), message: nsError.localizedDescription, details: nil))
             }
             break
-        case .doozScenarioEpochSet(let data):
+
+        case .golainVendorModelGet(let data):
             guard let appKey = meshNetworkManager.meshNetwork?.applicationKeys[KeyIndex(data.keyIndex)] else{
                 let error = MeshNetworkError.keyIndexOutOfRange
                 let nsError = error as NSError
                 result(FlutterError(code: String(nsError.code), message: nsError.localizedDescription, details: nil))
                 return
             }
-            let message = DoozEpochSet(packed: UInt16(data.packed), epoch: UInt32(data.epoch), correlation: UInt32(data.correlation), extra: UInt16?(data.extra ?? 0))
+            companyId = data.companyIdentifier
+            print(companyId)
+            print(data.message.bytes)
+            let message = GolainVendorModelGet(opCode: data.opCode, companyIdentifier: data.companyIdentifier, parameters: data.message)
             do{
                 _ = try meshNetworkManager.send(
                     message,
@@ -619,18 +624,14 @@ private extension DoozMeshManagerApi {
                 result(FlutterError(code: String(nsError.code), message: nsError.localizedDescription, details: nil))
             }
             break
-        case .golainVendorModelSet(let data):
-            print("golainVendorModelSet: Have data here")
-            guard let appKey = meshNetworkManager.meshNetwork?.applicationKeys[KeyIndex(0)] else{
+        case .doozScenarioEpochSet(let data):
+            guard let appKey = meshNetworkManager.meshNetwork?.applicationKeys[KeyIndex(data.keyIndex)] else{
                 let error = MeshNetworkError.keyIndexOutOfRange
                 let nsError = error as NSError
                 result(FlutterError(code: String(nsError.code), message: nsError.localizedDescription, details: nil))
                 return
             }
-            print("golainVendorModelSet: Have data here as well")
-            let opcode = UInt32(data.opCode)
-            let msg = data.message as Data
-            let message = try GolainVendorModelSet(opCode: opcode, message: msg)
+            let message = DoozEpochSet(packed: UInt16(data.packed), epoch: UInt32(data.epoch), correlation: UInt32(data.correlation), extra: UInt16?(data.extra ?? 0))
             do{
                 _ = try meshNetworkManager.send(
                     message,
